@@ -3,6 +3,7 @@ feed and associated activity. This user posts once a month and comments on other
 specific days.
 After a quick chat with your teammates, everybody thought it would be a good idea to model their
 social media activity.
+
 1/ Can you write a python script, a self-contained .py file to pass to your teammates, to
 (a) parse the json script (below) from the scraper
 (b) store the number of (i) posts and (ii)comments on a daily basis across the time period in a python
@@ -18,16 +19,12 @@ class
 }
 2/ Can you write another python script that takes the following input data as arguments on the
 command line:
-(i)
-(ii)
-(iii)
-(iv)
-(v)
-a lease start date
-a lease end date
-an optional first rent review date (if not supplied use the lease start date as default)
-the rent review frequency (in years)
-the rent amount at the start of the lease
+(i) a lease start date
+(ii) a lease end date
+(iii) an optional first rent review date (if not supplied use the lease start date as default)
+(iv) the rent review frequency (in years)
+(v) the rent amount at the start of the lease
+
 and calculate:
 a) the rent review dates that would apply during the lease
 b) calculate the rent review amount for each rent review if we assume that the rent grows by
