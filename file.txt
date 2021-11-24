@@ -1,0 +1,34 @@
+The Data Science team has just built a scraper that gobbled a lot of posts from an Instagram user’s
+feed and associated activity. This user posts once a month and comments on other posts on some
+specific days.
+After a quick chat with your teammates, everybody thought it would be a good idea to model their
+social media activity.
+1/ Can you write a python script, a self-contained .py file to pass to your teammates, to
+(a) parse the json script (below) from the scraper
+(b) store the number of (i) posts and (ii)comments on a daily basis across the time period in a python
+class
+(c) calculate the sum of posts and comments on a daily basis
+(d) calculate the aggregate number of posts and comments on a monthly basis
+(e) store the monthly totals for the whole period for (i) posts and (ii) comments in a csv file
+{ “periodStart”: “15/02/11”,
+“periodEnd”: “34/08/21”,
+“monthlyPostingDay”: 11,
+“comments” : [ [“2/3/21”, “Justin Bieber”, 5], [“5/4/21”, “Lady Gaga”, 6], ], [“5/4/21”, “Snoop Dog”,
+2] , [“13/5/21”,”Justin Bieber", 3]]
+}
+2/ Can you write another python script that takes the following input data as arguments on the
+command line:
+(i)
+(ii)
+(iii)
+(iv)
+(v)
+a lease start date
+a lease end date
+an optional first rent review date (if not supplied use the lease start date as default)
+the rent review frequency (in years)
+the rent amount at the start of the lease
+and calculate:
+a) the rent review dates that would apply during the lease
+b) calculate the rent review amount for each rent review if we assume that the rent grows by
+n% at each review
