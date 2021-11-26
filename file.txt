@@ -17,6 +17,9 @@ class
 “comments” : [ [“2/3/21”, “Justin Bieber”, 5], [“5/4/21”, “Lady Gaga”, 6], ], [“5/4/21”, “Snoop Dog”,
 2] , [“13/5/21”,”Justin Bieber", 3]]
 }
+
+
+
 2/ Can you write another python script that takes the following input data as arguments on the
 command line:
 (i) a lease start date
