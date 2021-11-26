@@ -14,12 +14,13 @@ import datetime
 
 PERIOD_FORMAT = "%d/%m/%y"
 DAILY_FORMAT = "%d/%m/%y"
+MONTH_YEAR_FORMAT = "%m/%y"
 
 json_string = '''{
     "periodStart" : "15/02/11",
     "periodEnd" : "31/08/21",
     "monthlyPostingDay" : 11,
-    "comments" :[["2/3/21","Justin Bieber",5], ["5/4/21", "Lady Gaga", 6],["5/4/21", "Snoop Dog", 2], ["13/5/21","Justin Bieber", 3] ]
+    "comments" :[["2/3/21","Justin Bieber",5], ["5/4/21", "Lady Gaga", 6],["5/4/21", "Snoop Dog", 2], ["13/5/21","Justin Bieber", 3],  ["12/5/21","Justin Bieber", 7] ]
 }'''
 
 
@@ -38,6 +39,12 @@ class Daily_sum:
         self.post_no = post_no
         self.comment_no = comment_no
         self.date_day = date_day
+    
+    def add_post(self):
+        self.post_no += 1
+
+    def add_comment(self, comment_number):
+        self.comment_no += comment_number
 
 
 def iter_dates(start_date_obj, end_date_obj):
@@ -74,45 +81,36 @@ def main():
         comment_no = post[2]
         if post_date_obj in dates_list:
             if post_date_obj in posts_obj_dict.keys() :
-                posts_obj_dict[post_date_obj].comment_no += comment_no
-                posts_obj_dict[post_date_obj].post_no += 1
+                posts_obj_dict[post_date_obj].add_comment(comment_no)
+                posts_obj_dict[post_date_obj].add_post()
             else:
                 posts_obj_dict[post_date_obj] = Daily_sum(1, comment_no, post_date_obj)
 
+    monthly_sum_dict ={}
     for i in posts_obj_dict.values():
-        print(i.date_day, i.comment_no, i.post_no )
+        sum_of_posts_daily = i.post_no
+        sum_of_comments_daily = i.comment_no
+        print(f'Daily sum for {i.date_day} is, posts: {sum_of_posts_daily} , comments: {sum_of_comments_daily}')
 
+        print(_datetime_obj2string(i.date_day, MONTH_YEAR_FORMAT))
 
-    # for i in posts_obj_list:
-    #     print(i.date_day)
-
-
-        # print(posts_obj_list[0].date_day)
+        if i.date_day.month in monthly_sum_dict.keys():
+            monthly_sum_dict[i.date_day.month]['monthly_post_sum'] += sum_of_posts_daily
+            monthly_sum_dict[i.date_day.month]['monthly_comments_sum'] += sum_of_comments_daily
+        else:
+            monthly_sum_dict[i.date_day.month] = {'monthly_post_sum' : sum_of_posts_daily, 'monthly_comments_sum' : sum_of_comments_daily }
     
-    
-    
+    print(monthly_sum_dict)
 
+    # for i in posts_obj_dict.values():
+    #     print(i.date_day.month)
 
+    
 
 
     # for i in iter_dates(start_date_obj, end_date_obj):
     #     if i in post_date_list:
     #         print(i)
-
-
-
-    # for i in data['comments']:
-    #     print(i)
-
-    # a0 = Daily_sum( day = '2/3/21', comment_no = 'Justin Bieber',  post_no = 5) 
-    # print(a0.posts) 
-
-    # a0 = Dataclass(data['comments'][0])
-    # a =[]
-    # for d in data['comments']:
-    #     a[d] = Dataclass()
-    # print(a0)
-
 
 
 if __name__ == '__main__':
