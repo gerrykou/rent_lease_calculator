@@ -30,13 +30,13 @@ def parse_data():
 
 class Daily_sum:
     def __init__(self,
-                # post_no,
-                # comment_no,
+                post_no,
+                comment_no,
                 date_day
                 ):
 
-        # self.post_no = post_no
-        # self.comment = comment_no
+        self.post_no = post_no
+        self.comment_no = comment_no
         self.date_day = date_day
 
 
@@ -66,22 +66,21 @@ def main():
     end_date_obj = _date_str2obj(data['periodEnd'], PERIOD_FORMAT)
     print(f'Start date: {start_date_obj}, End_date: {end_date_obj}')
 
-    dates_list =[i for i in iter_dates(start_date_obj, end_date_obj) ]
+    dates_list =[i for i in iter_dates(start_date_obj, end_date_obj)]
 
-    post_date_list =[]
+    posts_obj_dict = {}
     for post in data['comments']:
         post_date_obj = _date_str2obj(post[0], DAILY_FORMAT)
         comment_no = post[2]
-        post_date_list.append(post_date_obj)
-
-    posts_obj_dict = {}
-    for post_date in post_date_list:
-        if post_date in dates_list:
-            posts_obj_dict[post_date] = Daily_sum(comment_no, post_date)
-            # posts_obj_list.append(Daily_sum(post_date))
+        if post_date_obj in dates_list:
+            if post_date_obj in posts_obj_dict.keys() :
+                posts_obj_dict[post_date_obj].comment_no += comment_no
+                posts_obj_dict[post_date_obj].post_no += 1
+            else:
+                posts_obj_dict[post_date_obj] = Daily_sum(1, comment_no, post_date_obj)
 
     for i in posts_obj_dict.values():
-        print(i.date_day)
+        print(i.date_day, i.comment_no, i.post_no )
 
 
     # for i in posts_obj_list:
