@@ -67,19 +67,7 @@ def _datetime_obj2string(input_date, format):
     date_obj=datetime.datetime.strftime(input_date, format)
     return date_obj
 
-def export_to_csv(filename, data):
-    pass
-
-
-def main():
-    data = parse_data()
-
-    start_date_obj = _date_str2obj(data['periodStart'],  PERIOD_FORMAT)
-    end_date_obj = _date_str2obj(data['periodEnd'], PERIOD_FORMAT)
-    print(f'Start date: {start_date_obj}, End_date: {end_date_obj}')
-
-    dates_list =[i for i in iter_dates(start_date_obj, end_date_obj)]
-
+def store_data_in_class_objects(data , dates_list):
     posts_obj_dict = {}
     for post in data['comments']:
         post_date_obj = _date_str2obj(post[0], DAILY_FORMAT)
@@ -90,28 +78,49 @@ def main():
                 posts_obj_dict[post_date_obj].add_post()
             else:
                 posts_obj_dict[post_date_obj] = Daily_sum(1, comment_no, post_date_obj)
+    return posts_obj_dict
 
+
+def monthly_and_daily_sum(posts_obj_dict):
     monthly_sum_dict ={}
     for i in posts_obj_dict.values():
         sum_of_posts_daily = i.post_no
         sum_of_comments_daily = i.comment_no
         print(f'Daily sum for {i.date_day} is, posts: {sum_of_posts_daily} , comments: {sum_of_comments_daily}')
-
         month_year_str = _datetime_obj2string(i.date_day, MONTH_YEAR_FORMAT)
-
         if month_year_str in monthly_sum_dict.keys():
             monthly_sum_dict[month_year_str]['monthly_post_sum'] += sum_of_posts_daily
             monthly_sum_dict[month_year_str]['monthly_comments_sum'] += sum_of_comments_daily
         else:
             monthly_sum_dict[month_year_str] = {'monthly_post_sum' : sum_of_posts_daily, 'monthly_comments_sum' : sum_of_comments_daily }
     print(monthly_sum_dict)
+    return monthly_sum_dict
 
-    with open('monthly_sum.csv', mode='w') as csv_file:
+def export_to_csv(filename, data):
+    with open(filename , mode='w') as csv_file:
         fieldnames = ['month', 'posts_sum', 'comments_sum']
         writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
         writer.writeheader()
-        for i, j in monthly_sum_dict.items():
-            writer.writerow({ 'month' : i , 'posts_sum': j['monthly_post_sum'], 'comments_sum': j['monthly_comments_sum']})
+        for date, sum in data.items():
+            writer.writerow({ 'month' : date , 'posts_sum': sum['monthly_post_sum'], 'comments_sum': sum['monthly_comments_sum']})
+    return None
+
+
+def main():
+    data = parse_data()
+
+    start_date_obj = _date_str2obj(data['periodStart'],  PERIOD_FORMAT)
+    end_date_obj = _date_str2obj(data['periodEnd'], PERIOD_FORMAT)
+
+    print(f'Start date: {start_date_obj}, End_date: {end_date_obj}')
+
+    dates_list =[i for i in iter_dates(start_date_obj, end_date_obj)]
+
+    posts_obj_dict = store_data_in_class_objects(data , dates_list)
+
+    monthly_sum_dict = monthly_and_daily_sum(posts_obj_dict)
+
+    export_to_csv('social_media_data.csv', monthly_sum_dict)
 
 
 if __name__ == '__main__':
