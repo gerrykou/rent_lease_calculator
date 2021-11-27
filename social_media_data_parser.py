@@ -16,7 +16,7 @@ import csv
 INPUT_FORMAT = "%d/%m/%y"
 OUTPUT_FORMAT = "%Y-%m-%d"
 YM_OUTPUT_FORMAT = "%Y-%m"
-FILENAME = "v2_social_media_data.csv"
+FILENAME = "social_media_data.csv"
 
 json_string = """{
     "periodStart" : "15/02/11",
