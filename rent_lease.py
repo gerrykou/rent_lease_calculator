@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import argparse
-import datetime#
+import datetime
 
 #2/ Can you write another python script that takes the following input data as arguments on the
 # command line:
@@ -17,13 +17,12 @@ import datetime#
 
 FORMAT = "%Y-%m-%d"
 N = 0.11
-RENT_INCREASE = 1 + N
+RENT_INCREASE_FACTOR = 1 + N
 RENT_ROUND_DECIMAL = 0
 
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description="An app to calculate rent review dates and review amount.")
-
     parser.add_argument("--start_date", type=str, required=True,
                         help="lease start date, in ISO 8601 format YYYY-MM-DD")
     parser.add_argument("--end_date", type=str, required=True,
@@ -77,6 +76,7 @@ def check_positive_integer(input_number):
     return input_number
 
 def calculate_rent_review_dates(start_date_obj, end_date_obj, rev_freq):
+    #requires input date object, output in date string
     output =[]
     for date in _iter_dates(start_date_obj, end_date_obj, rev_freq):
         output.append(_datetime_obj2string(date, FORMAT))
@@ -89,12 +89,12 @@ def _iter_dates(start_date_obj, end_date_obj, rev_freq):
         yield next_date
         next_date = new_date_obj
 
-def calculate_increasing_rent(RENT, review_dates_list):
-    rent_increase_dict = {}
+def calculate_increasing_rent(START_DATE, RENT, review_dates_list):
+    rent_increase_dict = {f'{START_DATE}': RENT} #initialize dictionary with current rent, if review date == start date: overrides
     increasing_rent = RENT
-    for i in review_dates_list:
-        rent_increase_dict[i] = round(increasing_rent * RENT_INCREASE , RENT_ROUND_DECIMAL)
-        increasing_rent = rent_increase_dict[i]
+    for date in review_dates_list:
+        rent_increase_dict[date] = round(increasing_rent * RENT_INCREASE_FACTOR , RENT_ROUND_DECIMAL)
+        increasing_rent = rent_increase_dict[date]
     return rent_increase_dict
 
 
@@ -103,7 +103,7 @@ def main():
         args = parse_arguments()
 
         print("Program arguments:", args)
-        
+
         START_DATE = args.start_date
         END_DATE = args.end_date
         FIRST_REVIEW_DATE = args.first_review_date
@@ -116,7 +116,7 @@ def main():
 
     review_dates_list = calculate_rent_review_dates(FIRST_REVIEW_DATE, END_DATE, REVIEW_FREQ )
 
-    rent_increase_dict = calculate_increasing_rent(RENT, review_dates_list)
+    rent_increase_dict = calculate_increasing_rent(START_DATE, RENT, review_dates_list)
     print(rent_increase_dict)
         
 

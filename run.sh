@@ -1,6 +1,8 @@
 python3 rent_lease.py --start_date=2019-09-07 --end_date=2021-09-07 --first_review_date=2020-09-07 --review_freq=1  --rent=1200  
 python3 rent_lease.py --start_date=20190907 --end_date=20190907 --review_freq=2  --rent=700
-
+python3 rent_lease.py --start_date=2019-09-07 --end_date=2040-09-07 --first_review_date=2020-09-07 --review_freq=10  --rent=1200
+python3 rent_lease.py --start_date=2019-09-07 --end_date=2021-09-07 --first_review_date=2020-09-07 --review_freq=1  --rent=1200
+python3 rent_lease.py --start_date=2019-09-07 --end_date=2021-09-07 --first_review_date=2020-09-07 --review_freq=1  --rent=1200
 python3 rent_lease.py --help
 
 
