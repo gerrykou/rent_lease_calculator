@@ -36,7 +36,7 @@ json_string = """{
 }"""
 
 
-class Social_media_data:
+class SocialMediaData:
     def __init__(self, input_data):
         self._data = json.loads(input_data)
         self.period_start_date_obj = self._date_str2obj(self._data["periodStart"], INPUT_FORMAT)
@@ -100,30 +100,28 @@ class Social_media_data:
     def calculate_monthly_stats(self):        
         return self.calculate_stats(self.posts, self.intersection_dates_set, INPUT_FORMAT, YM_OUTPUT_FORMAT)
 
-    def export_to_csv(self,filename, data):
+    def export_to_csv(self, filename):
         with open(filename , mode="w") as csv_file:
             fieldnames = ["date_month", "posts_sum", "comments_sum"]
             writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
             writer.writeheader()
-            for date, sum in data.items():
+            for date, sum in self.calculate_monthly_stats().items():
                 writer.writerow({ "date_month" : date , "posts_sum": sum["posts_sum"], "comments_sum": sum["comments_sum"]})
         return None
 
 
 def main():
-    data = Social_media_data(json_string)
+    data = SocialMediaData(json_string)
 
-    daily_stat_dict = data.calculate_daily_stats()
-    print(daily_stat_dict)
+    print(data.calculate_daily_stats())
 
     start_date_str = data._datetime_obj2string(data.period_start_date_obj, OUTPUT_FORMAT)
     end_date_str = data._datetime_obj2string(data.period_end_date_obj, OUTPUT_FORMAT)
-    filename = '_'.join([start_date_str, end_date_str, FILENAME])
+    filename = "_".join([start_date_str, end_date_str, FILENAME])
 
-    monthly_stats_dict = data.calculate_monthly_stats()
-    print(monthly_stats_dict)
+    print(data.calculate_monthly_stats())
 
-    data.export_to_csv(filename, monthly_stats_dict)
+    data.export_to_csv(filename)
 
 
 if __name__ == "__main__":

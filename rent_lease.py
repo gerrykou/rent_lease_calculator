@@ -57,7 +57,7 @@ def _date_str2obj(date_string, format):
     try:
         date_obj = datetime.datetime.strptime(date_string, format)
     except:
-        raise argparse.ArgumentTypeError(f"Date {date_string} is not in a correct date format or not a valid date. It should be in ISO 8601 format YYYY-MM-DD, try --help for more info") 
+        raise argparse.ArgumentTypeError(f"""Date {date_string} is not in a correct date format or not a valid date. It should be in ISO 8601 format YYYY-MM-DD, try --help for more info""") 
     return date_obj.date()
 
 def _datetime_obj2string(input_date, format):
@@ -89,7 +89,13 @@ def _iter_dates(start_date_obj, end_date_obj, rev_freq):
         yield next_date
         next_date = new_date_obj
 
-def calculate_increasing_rent(start_date_str, end_date_obj, first_review_day_obj, review_frequency, initial_rent, rent_increase_factor, rent_round_decimal):
+def calculate_increasing_rent(start_date_str,
+                            end_date_obj,
+                            first_review_day_obj,
+                            review_frequency,
+                            initial_rent,
+                            rent_increase_factor,
+                            rent_round_decimal):
     """Function that calculates how much the rent will increase per review date
     from a start date
     
@@ -120,7 +126,13 @@ def main():
         exit(10)
 
 
-    rent_increase_dict = calculate_increasing_rent(START_DATE, END_DATE_OBJ, FIRST_REVIEW_DATE_OBJ, REVIEW_FREQUENCY, RENT, RENT_INCREASE_FACTOR, RENT_ROUND_DECIMAL )
+    rent_increase_dict = calculate_increasing_rent(START_DATE,
+                                                END_DATE_OBJ,
+                                                FIRST_REVIEW_DATE_OBJ,
+                                                REVIEW_FREQUENCY,
+                                                RENT,
+                                                RENT_INCREASE_FACTOR,
+                                                RENT_ROUND_DECIMAL)
     print(rent_increase_dict)
         
 
