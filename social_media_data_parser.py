@@ -44,10 +44,8 @@ class Social_media_data:
         self.posts = self._data["comments"]
         self.posts_dates_set = self._posts_dates_set(self.posts, INPUT_FORMAT)
         self.intersection_dates_set = self._intersection_dates_set(self.period_start_date_obj, self.period_end_date_obj, self.posts_dates_set)
-        self.daily_stats_dict = self.calculate_stats(self.posts, self.intersection_dates_set, INPUT_FORMAT, OUTPUT_FORMAT)
-        self.monthly_stats_dict = self.calculate_stats(self.posts, self.intersection_dates_set, INPUT_FORMAT, YM_OUTPUT_FORMAT)
-    
 
+    
     def _posts_dates_set(self, posts, input_format):
         posts_dates_set = set()
         for post in posts: 
@@ -90,13 +88,17 @@ class Social_media_data:
                 date_str = self._datetime_obj2string(date_obj, output_format)
                 comments_no = post[2]
                 if date_str in sum_dict.keys():
-                    sum_dict[date_str]['posts_sum'] += 1
-                    sum_dict[date_str]['comments_sum'] += comments_no
+                    sum_dict[date_str]["posts_sum"] += 1
+                    sum_dict[date_str]["comments_sum"] += comments_no
                 else:
-                    sum_dict[date_str] = {'posts_sum' : 1, 'comments_sum' : comments_no }
-        print(sum_dict)
+                    sum_dict[date_str] = {"posts_sum" : 1, "comments_sum" : comments_no }
         return sum_dict
-
+    
+    def calculate_daily_stats(self):
+        return self.calculate_stats(self.posts, self.intersection_dates_set, INPUT_FORMAT, OUTPUT_FORMAT)
+    
+    def calculate_monthly_stats(self):        
+        return self.calculate_stats(self.posts, self.intersection_dates_set, INPUT_FORMAT, YM_OUTPUT_FORMAT)
 
     def export_to_csv(self,filename, data):
         with open(filename , mode="w") as csv_file:
@@ -111,11 +113,17 @@ class Social_media_data:
 def main():
     data = Social_media_data(json_string)
 
+    daily_stat_dict = data.calculate_daily_stats()
+    print(daily_stat_dict)
+
     start_date_str = data._datetime_obj2string(data.period_start_date_obj, OUTPUT_FORMAT)
     end_date_str = data._datetime_obj2string(data.period_end_date_obj, OUTPUT_FORMAT)
     filename = '_'.join([start_date_str, end_date_str, FILENAME])
 
-    data.export_to_csv(filename, data.monthly_stats_dict)
+    monthly_stats_dict = data.calculate_monthly_stats()
+    print(monthly_stats_dict)
+
+    data.export_to_csv(filename, monthly_stats_dict)
 
 
 if __name__ == "__main__":
