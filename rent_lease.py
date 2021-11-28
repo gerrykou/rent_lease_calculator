@@ -92,11 +92,7 @@ def _iter_dates(start_date_obj, end_date_obj, rev_freq):
 def calculate_increasing_rent(start_date_str, end_date_obj, first_review_day_obj, review_frequency, initial_rent, rent_increase_factor, rent_round_decimal):
     """Function that calculates how much the rent will increase per review date
     from a start date
-
-    Args
-    start_date: When the lease starts
-    rent: initial rent at start_date
-
+    
     """
     review_dates_list = calculate_rent_review_dates(first_review_day_obj, end_date_obj, review_frequency)
     rent_increase_dict = {f'{start_date_str}': initial_rent}  # initialize dictionary with current rent, if review date == start date: overrides

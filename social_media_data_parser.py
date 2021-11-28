@@ -1,3 +1,7 @@
+import json
+import datetime
+import csv
+
 # 1/ Can you write a python script, a self-contained .py file to pass to your teammates, to
 # (a) parse the json script (below) from the scraper
 # (b) store the number of (i) posts and (ii)comments on a daily basis across the time period in a python
@@ -12,20 +16,12 @@
 # 2] , [“13/5/21”,”Justin Bieber", 3]]
 # }
 
-# json_data = { "periodStart": "15/02/11",
-# "periodEnd": "34/08/21",
-# "monthlyPostingDay": 11,
-# "comments" : [ ["2/3/21", "Justin Bieber", 5], ["5/4/21", "Lady Gaga", 6], ], ["5/4/21","Snoop Dog",2] , ["13/5/21","Justin Bieber", 3]]
-#  }
-
 # The scraper should
 #     1. not return out of range dates 
-#     2. return dates with consistent specific format - "%d/%m/%y"
+#     2. return dates with consistent specific format - "%Y-%m-%d"
 #     3. validated structure lists
 
-import json
-import datetime
-import csv
+
 
 INPUT_FORMAT = "%d/%m/%y"
 OUTPUT_FORMAT = "%Y-%m-%d"
@@ -36,13 +32,12 @@ json_string = """{
     "periodStart" : "15/02/11",
     "periodEnd" : "31/08/21",
     "monthlyPostingDay" : 11,
-    "comments" :[["2/3/10","Justin Bieber",5],["2/3/21","Justin Bieber",5], ["5/4/21", "Lady Gaga", 6],["5/4/21", "Snoop Dog", 2], ["12/4/21", "Snoop Dog", 2], ["13/5/21","Justin Bieber", 3]]
+    "comments" :[["2/3/21","Justin Bieber",5], ["5/4/21", "Lady Gaga", 6],["5/4/21", "Snoop Dog", 2], ["13/5/21","Justin Bieber", 3]]
 }"""
 
 
 class Social_media_data:
-    def __init__(self,
-                input_data):
+    def __init__(self, input_data):
         self._data = json.loads(input_data)
         self.period_start_date_obj = self._date_str2obj(self._data["periodStart"], INPUT_FORMAT)
         self.period_end_date_obj = self._date_str2obj(self._data["periodEnd"], INPUT_FORMAT)
@@ -60,8 +55,7 @@ class Social_media_data:
         return posts_dates_set
     
     def _intersection_dates_set(self, period_start_date_obj, period_end_date_obj, posts_dates_set):
-        intersection_dates_set ={i for i in self._iter_dates(period_start_date_obj, period_end_date_obj) if i in posts_dates_set} #dates list for the period
-        print(intersection_dates_set)
+        intersection_dates_set ={i for i in self._iter_dates(period_start_date_obj, period_end_date_obj) if i in posts_dates_set}
         return intersection_dates_set
 
     def _iter_dates(self, start_date_obj, end_date_obj):
@@ -83,12 +77,17 @@ class Social_media_data:
         return date_obj
 
     def calculate_stats(self, posts, intersection_dates_set , input_format, output_format):
+        """Function that calculates daily or monthly sum of posts and comments 
+        for a specific range of dates. Daily or monthly is controlled from ouput format
+        For daily stats: OUTPUT_FORMAT = "%Y-%m-%d"
+        For monthly stats: YM_OUTPUT_FORMAT = "%Y-%m"
+
+        """
         sum_dict = {}
         for post in posts:
             date_obj = self._date_str2obj(post[0], input_format)
             if date_obj in intersection_dates_set:
                 date_str = self._datetime_obj2string(date_obj, output_format)
-                print(date_str)
                 comments_no = post[2]
                 if date_str in sum_dict.keys():
                     sum_dict[date_str]['posts_sum'] += 1
